@@ -1,143 +1,85 @@
-// src/app/biblioteca/page.jsx
-'use client';
-
-import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FiBookOpen, FiUploadCloud, FiUser, FiLogOut, FiHome } from "react-icons/fi";
+import Link from "next/link";
 
 export default function BibliotecaPage() {
   const { data: session, status } = useSession();
+  const router = useRouter();
   const [books, setBooks] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
-  // Filtros
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
-  
+  const isAdmin = session?.user?.role === "ADMIN";
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Cargar libros
-        const booksResponse = await fetch('/api/books');
-        if (!booksResponse.ok) {
-          throw new Error('Error al cargar los libros');
-        }
-        const booksData = await booksResponse.json();
-        setBooks(booksData);
-        
-        // Cargar categorías
-        const categoriesResponse = await fetch('/api/categories');
-        if (!categoriesResponse.ok) {
-          throw new Error('Error al cargar las categorías');
-        }
-        const categoriesData = await categoriesResponse.json();
-        setCategories(categoriesData);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchData();
+    if (status === "unauthenticated") {
+      router.push("/auth/login");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setBooks([
+        { id: 1, title: "El Principito", author: "Antoine de Saint-Exupéry", cover: "/covers/principito.jpg" },
+        { id: 2, title: "1984", author: "George Orwell", cover: "/covers/1984.jpg" },
+        { id: 3, title: "Cien Años de Soledad", author: "Gabriel García Márquez", cover: "/covers/cien.jpg" },
+      ]);
+    }, 1000);
   }, []);
-  
-  // Filtrar libros
-  const filteredBooks = books.filter((book) => {
-    const matchesCategory = selectedCategory ? book.categoryId === selectedCategory : true;
-    const matchesSearch = searchTerm
-      ? book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author.toLowerCase().includes(searchTerm.toLowerCase())
-      : true;
-    return matchesCategory && matchesSearch;
-  });
-  
-  if (status === 'loading' || loading) {
-    return <div className="text-center p-8">Cargando biblioteca...</div>;
-  }
-  
-  if (error) {
-    return (
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
-      </div>
-    );
-  }
-  
+
+  if (status === "loading") return <div className="flex h-screen justify-center items-center text-lg">Cargando...</div>;
+
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-8">Biblioteca Virtual</h1>
-      
-      {/* Filtros */}
-      <div className="mb-8 flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Buscar por título o autor..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
-          />
-        </div>
-        
-        <div className="w-full md:w-64">
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full px-4 py-2 border rounded-md"
-          >
-            <option value="">Todas las categorías</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-      
-      {/* Lista de libros */}
-      {filteredBooks.length === 0 ? (
-        <div className="text-center p-8 bg-gray-50 rounded-lg">
-          <p>No se encontraron libros con los filtros seleccionados.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredBooks.map((book) => (
-            <Link key={book.id} href={`/biblioteca/libro/${book.id}`}>
-              <div className="border rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-                <div className="aspect-w-2 aspect-h-3 bg-gray-100">
-                  {book.coverImage ? (
-                    <Image
-                      src={book.coverImage}
-                      alt={book.title}
-                      width={500}
-                      height={750}
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full bg-gray-200">
-                      <span className="text-gray-400">Sin portada</span>
-                    </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h2 className="text-lg font-semibold mb-1 line-clamp-2">{book.title}</h2>
-                  <p className="text-gray-600 mb-2">{book.author}</p>
-                  <p className="text-sm text-gray-500">
-                    {book.category?.name || 'Sin categoría'}
-                  </p>
-                </div>
-              </div>
+    <div className="min-h-screen bg-gray-100">
+      {/* Navbar */}
+      <nav className="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+        <h1 className="text-xl font-bold">📚 Biblioteca Virtual</h1>
+        <div className="flex items-center gap-4">
+          {isAdmin && (
+            <Link href="/admin" className="flex items-center gap-2 hover:underline">
+              <FiHome /> Administrador
             </Link>
-          ))}
+          )}
+          <p className="flex items-center gap-2"><FiUser /> {session?.user?.email}</p>
+          <button className="flex items-center gap-2 hover:underline">
+            <FiLogOut /> Cerrar Sesión
+          </button>
         </div>
-      )}
+      </nav>
+
+      <div className="max-w-5xl mx-auto p-6">
+        {/* Botón para subir libros solo para admin */}
+        {isAdmin && (
+          <div className="mb-6 text-right">
+            <Link href="/books/upload">
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                <FiUploadCloud /> Subir Libro
+              </button>
+            </Link>
+          </div>
+        )}
+
+        {/* Lista de Libros */}
+        {books.length === 0 ? (
+          <p className="text-center text-gray-500">No hay libros disponibles.</p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {books.map((book) => (
+              <div key={book.id} className="bg-white shadow-lg rounded-xl p-4">
+                <img src={book.cover} alt={book.title} className="w-full h-48 object-cover rounded-md" />
+                <h2 className="mt-3 text-xl font-semibold text-gray-800">{book.title}</h2>
+                <p className="text-gray-600 text-sm">Autor: {book.author}</p>
+                <Link href={`/biblioteca/libro/${book.id}`}>
+                  <button className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                    <FiBookOpen /> Leer
+                  </button>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+

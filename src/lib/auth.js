@@ -1,68 +1,57 @@
-// src/lib/auth.js
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcrypt';
-import prisma from './prisma';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import prisma from "./prisma";
+import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Contraseña", type: "password" }
+        email: { label: "Email", type: "text", placeholder: "correo@ejemplo.com" },
+        password: { label: "Contraseña", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        });
+        console.log("🔍 Buscando usuario en la base de datos...");
+        const user = await prisma.user.findFirst({
+            where: { email: credentials.email.trim().toLowerCase() }, // Normaliza el email
+          });
 
         if (!user) {
-          return null;
+          console.log("❌ Usuario no encontrado");
+          throw new Error("Correo o contraseña incorrectos");
         }
 
-        const isPasswordValid = await compare(credentials.password, user.password);
+        console.log("✅ Usuario encontrado:", user);
 
-        if (!isPasswordValid) {
-          return null;
+        const passwordMatch = await bcrypt.compare(credentials.password, user.password);
+        console.log("🔍 Comparando contraseñas...");
+        
+        if (!passwordMatch) {
+          console.log("❌ Contraseña incorrecta");
+          throw new Error("Correo o contraseña incorrectos");
         }
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
-      }
-    })
+        console.log("✅ Contraseña correcta, autenticando...");
+        return user;
+      },
+    }),
   ],
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
-    jwt: async ({ token, user }) => {
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
-      }
+    async jwt({ token, user }) {
+      if (user) token.user = user;
       return token;
     },
-    session: async ({ session, token }) => {
-      if (token) {
-        session.user.id = token.id;
-        session.user.role = token.role;
-      }
+    async session({ session, token }) {
+      session.user = token.user;
       return session;
-    }
-  },
-  pages: {
-    signIn: '/auth/signin',
-  },
-  session: {
-    strategy: 'jwt',
+    },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);
+
