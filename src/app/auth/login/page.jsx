@@ -18,7 +18,6 @@ export default function LoginPage() {
     setError("");
     setIsLoading(true);
 
-    console.log("📩 Enviando datos:", { email, password });
 
     try {
       const res = await signIn("credentials", {
@@ -27,7 +26,7 @@ export default function LoginPage() {
         redirect: false,
       });
       
-      console.log("🔍 Respuesta del backend:", res);
+      
 
       if (res?.error) {
         setError("Correo o contraseña incorrectos");
@@ -46,7 +45,6 @@ export default function LoginPage() {
       {/* Panel izquierdo - Imagen/Gráficos */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-500 to-cyan-600 flex-col justify-center items-center p-12 relative">
         <div className="absolute top-8 left-8 flex items-center">
-          <FaStethoscope className="text-white text-3xl mr-2" />
           <h1 className="text-2xl font-bold text-white">Biossanar</h1>
         </div>
         
@@ -60,7 +58,7 @@ export default function LoginPage() {
           
           <div className="mt-10 grid grid-cols-3 gap-4">
             <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
-              <h3 className="text-white font-bold">+10,000</h3>
+              <h3 className="text-white font-bold">+100</h3>
               <p className="text-white/80 text-sm">Recursos disponibles</p>
             </div>
             <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
@@ -69,7 +67,7 @@ export default function LoginPage() {
             </div>
             <div className="bg-white/20 rounded-lg p-4 backdrop-blur-sm">
               <h3 className="text-white font-bold">+50</h3>
-              <p className="text-white/80 text-sm">Especialidades</p>
+              <p className="text-white/80 text-sm">Categorias</p>
             </div>
           </div>
         </div>

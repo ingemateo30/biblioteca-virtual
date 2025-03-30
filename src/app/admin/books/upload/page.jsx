@@ -1,4 +1,3 @@
-// src/app/admin/books/upload/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -25,15 +24,13 @@ export default function UploadBookPage() {
     pages: '',
     categoryId: '',
   });
-  
-  // Verificar si el usuario es administrador
+
   useEffect(() => {
     if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
       router.push('/biblioteca');
     }
   }, [session, status, router]);
-  
-  // Cargar categorías
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -48,7 +45,7 @@ export default function UploadBookPage() {
     
     fetchCategories();
   }, []);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -87,12 +84,12 @@ export default function UploadBookPage() {
   }
   
   if (status === 'authenticated' && session?.user?.role !== 'ADMIN') {
-    return null; // No renderizar nada mientras redirige
+    return null;
   }
   
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Subir Nuevo Libro</h1>
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Subir Nuevo Libro</h1>
       
       {errorMessage && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -102,159 +99,62 @@ export default function UploadBookPage() {
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block mb-2 font-medium">
-              Título *
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              Autor *
-              <input
-                type="text"
-                name="author"
-                value={formData.author}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div className="md:col-span-2">
-            <label className="block mb-2 font-medium">
-              Descripción
-              <textarea
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows="4"
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              URL de la Portada
-              <input
-                type="url"
-                name="coverImage"
-                value={formData.coverImage}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              URL del Archivo (PDF/EPUB) *
-              <input
-                type="url"
-                name="fileUrl"
-                value={formData.fileUrl}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              ISBN
-              <input
-                type="text"
-                name="isbn"
-                value={formData.isbn}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              Editorial
-              <input
-                type="text"
-                name="publisher"
-                value={formData.publisher}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              Año de Publicación
-              <input
-                type="number"
-                name="year"
-                value={formData.year}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              Número de Páginas
-              <input
-                type="number"
-                name="pages"
-                value={formData.pages}
-                onChange={handleChange}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              />
-            </label>
-          </div>
-          
-          <div>
-            <label className="block mb-2 font-medium">
-              Categoría *
-              <select
-                name="categoryId"
-                value={formData.categoryId}
-                onChange={handleChange}
-                required
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
-              >
-                <option value="">Seleccionar categoría</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          {['title', 'author', 'coverImage', 'fileUrl', 'isbn', 'publisher', 'year', 'pages'].map((field) => (
+            <div key={field}>
+              <label className="block text-gray-700 font-medium mb-2 capitalize">
+                {field.replace(/([A-Z])/g, ' $1')} *
+                <input
+                  type={field === 'year' || field === 'pages' ? 'number' : 'text'}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 p-2"
+                />
+              </label>
+            </div>
+          ))}
         </div>
         
-        <div className="flex justify-end">
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Descripción</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            rows="4"
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 p-2"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Categoría *</label>
+          <select
+            name="categoryId"
+            value={formData.categoryId}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300 p-2"
+          >
+            <option value="">Seleccionar categoría</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="flex justify-end space-x-4">
           <button
             type="button"
             onClick={() => router.push('/admin/books')}
-            className="px-4 py-2 mr-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+            className="px-4 py-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 transition"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={isLoading}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition disabled:opacity-50"
           >
             {isLoading ? 'Subiendo...' : 'Subir Libro'}
           </button>
