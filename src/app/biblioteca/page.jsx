@@ -31,12 +31,12 @@ export default function BibliotecaPage() {
     const cargarDatos = async () => {
       try {
         // Cargar libros
-        const resLibros = await fetch("/api/libros");
+        const resLibros = await fetch("/api/books");
         const librosData = await resLibros.json();
         setLibros(librosData);
 
         // Cargar categorías
-        const resCategorias = await fetch("/api/categorias");
+        const resCategorias = await fetch("/api/categories");
         const categoriasData = await resCategorias.json();
         setCategorias(categoriasData);
       } catch (error) {
@@ -52,14 +52,15 @@ export default function BibliotecaPage() {
   }, [session]);
 
   // Filtrar libros por búsqueda y categoría
-  const librosFiltrados = libros.filter((libro) => {
-    const matchBusqueda = libro.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
-                          libro.autor.toLowerCase().includes(busqueda.toLowerCase());
-    const matchCategoria = categoriaSeleccionada === "todas" || 
-                          libro.categoriaId === categoriaSeleccionada;
-    
-    return matchBusqueda && matchCategoria;
-  });
+  const librosFiltrados = Array.isArray(libros) 
+  ? libros.filter((libro) => {
+      const matchBusqueda = libro.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
+                            libro.autor.toLowerCase().includes(busqueda.toLowerCase());
+      const matchCategoria = categoriaSeleccionada === "todas" || 
+                            libro.categoriaId === categoriaSeleccionada;
+      return matchBusqueda && matchCategoria;
+    })
+  : []
 
   // Manejadores de eventos
   const handleBusqueda = (valor) => {

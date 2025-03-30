@@ -47,12 +47,12 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-500 to-cyan-600 flex-col justify-center items-center p-12 relative">
         <div className="absolute top-8 left-8 flex items-center">
           <FaStethoscope className="text-white text-3xl mr-2" />
-          <h1 className="text-2xl font-bold text-white">MediCampus</h1>
+          <h1 className="text-2xl font-bold text-white">Biossanar</h1>
         </div>
         
         <div className="text-center max-w-md">
           <FaBookMedical className="text-white text-7xl mx-auto mb-6 opacity-90" />
-          <h2 className="text-3xl font-bold text-white mb-4">Biblioteca Virtual de Ciencias Médicas</h2>
+          <h2 className="text-3xl font-bold text-white mb-4">Biblioteca Virtual</h2>
           <p className="text-white/90 text-lg">
             Accede a nuestra completa colección de recursos académicos en salud, 
             investigaciones y material didáctico para tu formación profesional.
@@ -75,7 +75,7 @@ export default function LoginPage() {
         </div>
         
         <div className="absolute bottom-6 left-0 right-0 text-center text-white/70 text-sm">
-          © 2025 MediCampus · Institución Educativa de Ciencias de la Salud
+          © 2025 biossanar · desarrollado por MSO
         </div>
       </div>
       
@@ -85,7 +85,7 @@ export default function LoginPage() {
           <div className="text-center mb-10">
             <div className="flex items-center justify-center lg:hidden mb-4">
               <FaStethoscope className="text-teal-600 text-2xl mr-2" />
-              <h1 className="text-xl font-bold text-gray-800">MediCampus</h1>
+              <h1 className="text-xl font-bold text-gray-800">Biossanar</h1>
             </div>
             <h2 className="text-3xl font-bold text-gray-800">Bienvenido de nuevo</h2>
             <p className="text-gray-600 mt-2">Accede a la plataforma de recursos educativos</p>

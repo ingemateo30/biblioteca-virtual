@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import prisma from "./prisma";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions = {
@@ -12,6 +12,7 @@ export const authOptions = {
         password: { label: "Contraseña", type: "password" },
       },
       async authorize(credentials) {
+        console.log("📩 Datos recibidos:", credentials);
         console.log("🔍 Buscando usuario en la base de datos...");
         const user = await prisma.user.findFirst({
             where: { email: credentials.email.trim().toLowerCase() }, // Normaliza el email
@@ -42,13 +43,19 @@ export const authOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) token.user = user;
-      return token;
-    },
-    async session({ session, token }) {
-      session.user = token.user;
-      return session;
-    },
+        if (user) {
+          token.role = user.role;
+          token.id = user.id;
+        }
+        return token;
+      },
+      async session({ session, token }) {
+        if (session?.user) {
+          session.user.role = token.role;
+          session.user.id = token.id;
+        }
+        return session;
+      },
   },
   secret: process.env.NEXTAUTH_SECRET,
 };
