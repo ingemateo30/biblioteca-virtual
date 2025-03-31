@@ -1,4 +1,3 @@
-// src/app/admin/categories/page.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -8,12 +7,10 @@ import { useSession } from 'next-auth/react';
 export default function CategoriesAdminPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  
   const [isAddingCategory, setIsAddingCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [editingCategory, setEditingCategory] = useState(null);
@@ -47,7 +44,6 @@ export default function CategoriesAdminPage() {
     fetchCategories();
   }, []);
   
-  // Filtrar categorías basado en el término de búsqueda
   const filteredCategories = categories.filter(category => 
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
