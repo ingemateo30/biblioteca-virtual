@@ -13,6 +13,7 @@
     "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
+    "biblioteca-virtual": "file:",
     "framer-motion": "^12.6.2",
     "lucide-react": "^0.485.0",
     "next": "15.2.4",

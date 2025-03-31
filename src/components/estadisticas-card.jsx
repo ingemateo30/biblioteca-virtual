@@ -2,48 +2,110 @@
 
 import React from 'react';
 
-const EstadisticasCard = ({ titulo, cantidad, icono, color }) => {
-  // Función para determinar los colores de fondo y texto según el color proporcionado
+const EstadisticasCard = ({ titulo, cantidad, icono, color, darkMode = true }) => {
+  // Función para determinar los colores de fondo y texto según el color proporcionado y el modo
   const getColors = () => {
     const colorMap = {
       indigo: {
-        bg: 'bg-indigo-50',
-        text: 'text-indigo-700',
-        iconBg: 'bg-indigo-100',
-        iconColor: 'text-indigo-600',
-        border: 'border-indigo-200'
+        light: {
+          bg: 'bg-indigo-50',
+          text: 'text-indigo-700',
+          iconBg: 'bg-indigo-100',
+          iconColor: 'text-indigo-600',
+          border: 'border-indigo-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-indigo-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-indigo-400',
+          border: 'border-gray-700'
+        }
       },
       emerald: {
-        bg: 'bg-emerald-50',
-        text: 'text-emerald-700',
-        iconBg: 'bg-emerald-100',
-        iconColor: 'text-emerald-600',
-        border: 'border-emerald-200'
+        light: {
+          bg: 'bg-emerald-50',
+          text: 'text-emerald-700',
+          iconBg: 'bg-emerald-100',
+          iconColor: 'text-emerald-600',
+          border: 'border-emerald-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-emerald-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-emerald-400',
+          border: 'border-gray-700'
+        }
       },
       purple: {
-        bg: 'bg-purple-50',
-        text: 'text-purple-700',
-        iconBg: 'bg-purple-100',
-        iconColor: 'text-purple-600',
-        border: 'border-purple-200'
+        light: {
+          bg: 'bg-purple-50',
+          text: 'text-purple-700',
+          iconBg: 'bg-purple-100',
+          iconColor: 'text-purple-600',
+          border: 'border-purple-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-purple-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-purple-400',
+          border: 'border-gray-700'
+        }
       },
       blue: {
-        bg: 'bg-blue-50',
-        text: 'text-blue-700',
-        iconBg: 'bg-blue-100',
-        iconColor: 'text-blue-600',
-        border: 'border-blue-200'
+        light: {
+          bg: 'bg-blue-50',
+          text: 'text-blue-700',
+          iconBg: 'bg-blue-100',
+          iconColor: 'text-blue-600',
+          border: 'border-blue-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-blue-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-blue-400',
+          border: 'border-gray-700'
+        }
       },
       amber: {
-        bg: 'bg-amber-50',
-        text: 'text-amber-700',
-        iconBg: 'bg-amber-100',
-        iconColor: 'text-amber-600',
-        border: 'border-amber-200'
+        light: {
+          bg: 'bg-amber-50',
+          text: 'text-amber-700',
+          iconBg: 'bg-amber-100',
+          iconColor: 'text-amber-600',
+          border: 'border-amber-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-amber-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-amber-400',
+          border: 'border-gray-700'
+        }
+      },
+      teal: {
+        light: {
+          bg: 'bg-teal-50',
+          text: 'text-teal-700',
+          iconBg: 'bg-teal-100',
+          iconColor: 'text-teal-600',
+          border: 'border-teal-200'
+        },
+        dark: {
+          bg: 'bg-gray-800',
+          text: 'text-teal-400',
+          iconBg: 'bg-gray-700',
+          iconColor: 'text-teal-400',
+          border: 'border-gray-700'
+        }
       }
     };
 
-    return colorMap[color] || colorMap.indigo;
+    const selectedColor = colorMap[color] || colorMap.teal;
+    return darkMode ? selectedColor.dark : selectedColor.light;
   };
 
   // Función para renderizar el icono según el tipo
@@ -92,14 +154,14 @@ const EstadisticasCard = ({ titulo, cantidad, icono, color }) => {
     <div className={`p-6 rounded-xl ${colors.bg} border ${colors.border} transition-all duration-300 hover:shadow-md`}>
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-medium text-gray-700">{titulo}</h3>
+          <h3 className={`text-lg font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>{titulo}</h3>
           <p className={`text-3xl font-bold mt-2 ${colors.text}`}>{cantidad}</p>
         </div>
         {renderIcon()}
       </div>
       
       <div className="mt-4">
-        <div className="w-full bg-gray-200 rounded-full h-1.5">
+        <div className={`w-full ${darkMode ? 'bg-gray-700' : 'bg-gray-200'} rounded-full h-1.5`}>
           <div 
             className={`h-1.5 rounded-full ${colors.text.replace('text', 'bg')}`} 
             style={{ width: `${Math.min(100, cantidad)}%` }}
