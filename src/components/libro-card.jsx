@@ -36,10 +36,10 @@ export default function LibroCard({ libro, isAdmin }) {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="relative h-56 bg-gray-100">
-        {libro.portada ? (
+        {libro.coverImage  ? (
           <Image 
-            src={libro.portada} 
-            alt={`Portada de ${libro.titulo}`} 
+            src={libro.coverImage} 
+            alt={`Portada de ${libro.title}`} 
             fill 
             className="object-cover"
           />
@@ -53,17 +53,17 @@ export default function LibroCard({ libro, isAdmin }) {
         
         <div className="absolute top-3 right-3">
           <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full">
-            {libro.categoria?.nombre || "Sin categoría"}
+            {libro.category?.name || "Sin categoría"}
           </span>
         </div>
       </div>
       
       <div className="p-5">
-        <h3 className="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{libro.titulo}</h3>
-        <p className="text-sm text-gray-600 mb-3">Por: {libro.autor}</p>
+        <h3 className="text-lg font-bold text-gray-800 mb-1 line-clamp-1">{libro.title}</h3>
+        <p className="text-sm text-gray-600 mb-3">Por: {libro.author}</p>
         
-        {libro.descripcion && (
-          <p className="text-sm text-gray-500 mb-4 line-clamp-2">{libro.descripcion}</p>
+        {libro.description && (
+          <p className="text-sm text-gray-500 mb-4 line-clamp-2">{libro.description}</p>
         )}
         
         <div className="flex justify-between gap-3 mt-5">

@@ -7,12 +7,10 @@ import Navbar from "@/components/navbar";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// Componentes
 import LibroCard from "@/components/libro-card";
 import Buscador from "@/components/buscador";
 import CategoryFilter from "@/components/category-filter";
 
-// Nuevos componentes para dashboards
 import EstadisticasCard from "@/components/estadisticas-card";
 import UsersList from "@/components/users-list";
 
@@ -74,10 +72,10 @@ export default function BibliotecaPage() {
   // Filtrar libros por búsqueda y categoría
   const librosFiltrados = Array.isArray(libros) 
   ? libros.filter((libro) => {
-      const matchBusqueda = libro.titulo.toLowerCase().includes(busqueda.toLowerCase()) ||
-                            libro.autor.toLowerCase().includes(busqueda.toLowerCase());
+      const matchBusqueda = libro.title.toLowerCase().includes(busqueda.toLowerCase()) ||
+                            libro.author.toLowerCase().includes(busqueda.toLowerCase());
       const matchCategoria = categoriaSeleccionada === "todas" || 
-                            libro.categoriaId === categoriaSeleccionada;
+      libro.categoryId === categoriaSeleccionada;
       return matchBusqueda && matchCategoria;
     })
   : [];
