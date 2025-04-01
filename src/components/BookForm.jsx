@@ -72,7 +72,6 @@ export default function BookForm({ categories, isLoading, error, onSubmit }) {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Campos de texto */}
                 {Object.entries(fields).map(([inputName, label]) => (
                     <div key={inputName} className="space-y-2">
                         <label className="block text-gray-300">
