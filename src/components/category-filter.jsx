@@ -9,22 +9,30 @@ export default function CategoryFilter({ categorias, categoriaSeleccionada, onCh
         <select
           value={categoriaSeleccionada}
           onChange={(e) => onChange(e.target.value)}
-          className={`w-full px-5 py-3.5 appearance-none border ${
-            darkMode 
-              ? 'bg-gray-800 border-gray-700 text-gray-200 focus:ring-teal-500 focus:border-teal-500 hover:border-gray-600' 
-              : 'bg-white border-gray-300 text-gray-700 focus:ring-indigo-500 focus:border-indigo-500'
-          } rounded-xl focus:outline-none focus:ring-2 transition-all duration-200 shadow-sm hover:shadow-md pr-10`}
+          className={`
+    w-full px-5 py-3.5 appearance-none border
+    ${darkMode
+              ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-gray-600 focus:ring-2 focus:ring-teal-500 focus:border-teal-500'
+              : 'bg-white border-gray-300 text-gray-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'}
+    rounded-xl focus:outline-none transition-all duration-200 shadow-sm hover:shadow-md
+  `}
         >
-          <option value="todas">Todas las categorías</option>
+          <option value="todas" className={darkMode ? 'bg-gray-800 text-gray-300' : 'bg-white text-gray-700'}>
+            Todas las categorías
+          </option>
           {categorias.map((categoria) => (
-            <option key={categoria.id} value={categoria.id}>
+            <option
+              key={categoria.id}
+              value={categoria.id}
+              className={darkMode ? 'bg-gray-800 text-gray-300 hover:bg-gray-700' : 'bg-white text-gray-700 hover:bg-gray-50'}
+            >
               {categoria.nombre}
             </option>
           ))}
         </select>
-        <div className={`absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none ${
-          darkMode ? 'text-gray-500' : 'text-gray-500'
-        }`}>
+
+        <div className={`absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none ${darkMode ? 'text-white-500' : 'text-white-500'
+          }`}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5"

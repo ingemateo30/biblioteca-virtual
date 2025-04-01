@@ -66,6 +66,13 @@ export default function Navbar() {
                 </Link>
                 
               )}
+                {session?.user?.role === 'ADMIN' && (
+                <Link href="/admin/books/upload" className="text-white relative overflow-hidden group px-4 py-2 rounded-xl text-sm font-medium">
+                  <span className="relative z-10 group-hover:text-gray-900 transition-colors duration-300">Subir libro</span>
+                  <span className="absolute bottom-0 left-0 w-full h-0 bg-teal-400 rounded-xl transform transition-all duration-300 group-hover:h-full"></span>
+                </Link>
+                
+              )}
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">

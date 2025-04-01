@@ -67,7 +67,7 @@ export default function BookForm({ categories, isLoading, error, onSubmit }) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Campos de texto */}
-        {['title', 'author', 'isbn', 'publisher'].map((field) => (
+        {['titulo', 'autor', 'Codigo', 'publicacion'].map((field) => (
           <div key={field} className="space-y-2">
             <label className="block text-gray-300">
               {field.charAt(0).toUpperCase() + field.slice(1)} *

@@ -7,7 +7,8 @@ import prisma from '@/lib/prisma';
 // Obtener un libro por ID
 export async function GET(request, { params }) {
   try {
-    const id = params.id;
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
     
     const book = await prisma.book.findUnique({
       where: { id },

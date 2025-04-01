@@ -6,8 +6,7 @@ import { Document, Page } from "react-pdf";
 import { pdfjs } from "react-pdf";
 import Navbar from "@/components/navbar";
 import dynamic from "next/dynamic"
-
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+import PDFEmbedViewer from "@/components/PDFEmbedViewer";
 
 export default function LibroPage() {
   const router = useRouter();
@@ -23,7 +22,7 @@ export default function LibroPage() {
       try {
         const res = await fetch(`/api/books/${params.id}`); // Usar params.id
         if (!res.ok) throw new Error("Libro no encontrado");
-        
+
         const data = await res.json();
         setLibro(data);
       } catch (err) {
@@ -41,7 +40,7 @@ export default function LibroPage() {
   };
   const PDFViewer = dynamic(
     () => import("@/components/PDFViewer"),
-    { 
+    {
       ssr: false,
       loading: () => (
         <div className="h-96 flex items-center justify-center text-gray-400">
@@ -73,7 +72,7 @@ export default function LibroPage() {
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-center p-8 bg-gray-800 rounded-lg">
           <h1 className="text-2xl text-red-400 mb-4">Error: {error}</h1>
-          <button 
+          <button
             onClick={() => router.back()}
             className="bg-teal-600 hover:bg-teal-500 text-white px-6 py-2 rounded-lg"
           >
@@ -87,9 +86,9 @@ export default function LibroPage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100">
       <Navbar />
-      
+
       <main className="container mx-auto px-4 py-12">
-        <button 
+        <button
           onClick={() => router.back()}
           className="mb-8 flex items-center text-teal-400 hover:text-teal-300"
         >
@@ -102,12 +101,12 @@ export default function LibroPage() {
         <div className="bg-gray-800 rounded-xl shadow-2xl p-8 mb-8">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-1/3">
-              <div className="relative h-96 bg-gray-700 rounded-xl overflow-hidden">
+              <div className="relative h-96 bg-gray-700 rounded-xl overflow-hidden flex items-center justify-center">
                 {libro.coverImage ? (
-                  <img 
-                    src={libro.coverImage} 
+                  <img
+                    src={libro.coverImage}
                     alt={libro.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 ) : (
                   <div className="flex items-center justify-center h-full text-gray-400">
@@ -117,7 +116,8 @@ export default function LibroPage() {
                   </div>
                 )}
               </div>
-              
+
+
               <div className="mt-6 space-y-4">
                 <button
                   onClick={handleDownload}
@@ -128,7 +128,7 @@ export default function LibroPage() {
                   </svg>
                   Descargar libro
                 </button>
-                
+
                 <div className="p-4 bg-gray-700 rounded-lg">
                   <h3 className="text-sm font-semibold text-teal-400 mb-2">Detalles del libro</h3>
                   <ul className="space-y-2 text-sm">
@@ -145,7 +145,7 @@ export default function LibroPage() {
             <div className="md:w-2/3">
               <h1 className="text-4xl font-bold mb-4">{libro.title}</h1>
               <p className="text-xl text-gray-300 mb-6">por {libro.author}</p>
-              
+
               {libro.description && (
                 <div className="mb-8">
                   <h2 className="text-2xl font-semibold mb-3">Descripción</h2>
@@ -155,9 +155,9 @@ export default function LibroPage() {
 
               <div className="bg-gray-700 rounded-xl p-4">
                 <h2 className="text-2xl font-semibold mb-4">Vista previa</h2>
-                
+
                 <div className="border border-gray-600 rounded-lg overflow-hidden">
-                <PDFViewer fileUrl={libro.fileUrl} />
+                  <PDFEmbedViewer fileUrl={libro.fileUrl} />
                 </div>
 
                 <div className="mt-4 flex items-center justify-between text-gray-300">
@@ -168,7 +168,7 @@ export default function LibroPage() {
                   >
                     Anterior
                   </button>
-                  
+
                   <span>
                     Página {pageNumber} de {numPages || "--"}
                   </span>

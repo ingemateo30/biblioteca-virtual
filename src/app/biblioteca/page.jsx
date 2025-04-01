@@ -247,11 +247,10 @@ export default function BibliotecaPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {categorias.map((categoria) => (
                       <div key={categoria.id} className="bg-gray-700 p-4 rounded-lg border border-gray-600 shadow-sm hover:shadow-md transition-all">
-                        <h3 className="font-medium text-lg text-white">{categoria.nombre}</h3>
-                        <p className="text-sm text-gray-400">{categoria.librosCount || 0} libros</p>
+                        <h3 className="font-medium text-lg text-white">{categoria.name}</h3>
                         <div className="mt-3 flex justify-end">
                           <Link 
-                            href={`/admin/categorias/editar/${categoria.id}`}
+                            href={`/admin/categories/${categoria.id}`}
                             className="text-teal-400 hover:text-teal-300 text-sm font-medium"
                           >
                             Editar
